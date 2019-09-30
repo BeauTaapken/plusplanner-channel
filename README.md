@@ -1,2 +1,2 @@
 # PlusPlannerDAL
-Dal layer of plusplanner
+DAL layer of plusplanner
