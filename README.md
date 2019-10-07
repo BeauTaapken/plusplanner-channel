@@ -1,2 +1,2 @@
-# PlusPlannerDAL
-DAL layer of plusplanner
+# PlusPlannerTrello
+Trello logic layer of plusplanner
