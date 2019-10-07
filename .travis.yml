@@ -9,6 +9,9 @@ language: java
 # https://docs.travis-ci.com/user/reference/trusty/#jvm-clojure-groovy-java-scala-images
 jdk:
  - oraclejdk11
+ 
+services:
+ - docker
 
 env:
   - MAVEN_VERSION=3.3.9
