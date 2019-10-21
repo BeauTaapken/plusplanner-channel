@@ -10,8 +10,8 @@ language: java
 jdk:
  - oraclejdk11
  
-# services:
-#  - docker
+services:
+ - docker
 
 env:
   - MAVEN_VERSION=3.3.9
