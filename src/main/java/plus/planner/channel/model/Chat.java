@@ -7,12 +7,12 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
-@Table(name = "")
+@Table(name = "chat")
 @EntityListeners(AuditingEntityListener.class)
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long chatid;
     @NotBlank
     private String name;
     @NotBlank
@@ -22,19 +22,35 @@ public class Chat {
 
     public Chat() {}
 
-    public Long getId() {
-        return id;
+    public Long getChatid() {
+        return chatid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setChatid(Long chatid) {
+        this.chatid = chatid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getProjectid() {
+        return projectid;
+    }
+
+    public void setProjectid(Long projectid) {
+        this.projectid = projectid;
     }
 
     public List<Channel> getChannels() {
         return channels;
     }
 
-    public void setChannels(List<Channel> messages) {
-        this.channels = messages;
+    public void setChannels(List<Channel> channels) {
+        this.channels = channels;
     }
 }

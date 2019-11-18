@@ -23,35 +23,36 @@ import java.util.stream.Collectors;
 @RequestMapping("chat")
 public class ChatController {
     @Autowired
-    ChannelRepository channelRepo;
+    private ChannelRepository channelRepo;
     @Autowired
-    ChatRepository chatRepo;
-    ObjectMapper mapper;
+    private ChatRepository chatRepo;
+    private ObjectMapper mapper;
 
     ChatController(){
         mapper = new ObjectMapper();
     }
 
-    @RequestMapping(path = "/create/{chatid}")
-    public void createChannel(@PathVariable String chatid) {
+    @RequestMapping(path = "/create/{chat}")
+    public void createChat(@PathVariable String chat) {
         try {
-            chatRepo.save(mapper.readValue(chatid, Chat.class));
+            chatRepo.save(mapper.readValue(chat, Chat.class));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @RequestMapping(path = "/read/{chatid}")
-    public String readSubPart(@PathVariable Long chatid) throws IOException {
+    @RequestMapping(path = "/read/{projectid}")
+    public String readChat(@PathVariable Long projectid) throws IOException {
         List<Chat> chats = chatRepo.findAll();
-        chats = chats.stream().filter(x -> x.getId() == chatid).collect(Collectors.toList());
+        List<Channel> channels = channelRepo.findAll();
+        chats = chats.stream().filter(x -> x.getChatid() == projectid).collect(Collectors.toList());
         for (Chat c: chats) {
-            c.setChannels(channelRepo.findAll());
-            for (Channel p : c.getChannels()) {
+            c.setChannels(channels.stream().filter(x -> x.getChannelid() == c.getChatid()).collect(Collectors.toList()));
+            for (Channel ch : c.getChannels()) {
                 URL url = null;
                 URLConnection conn = null;
                 try {
-                    url = new URL("http://localhost:8084" + p.getId());
+                    url = new URL("http://localhost:8084/message/read/" + ch.getChannelid());
                     conn = url.openConnection();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -64,26 +65,27 @@ public class ChatController {
                 while ((output = br.readLine()) != null) {
                     sb.append(output);
                 }
-                p.setMessages(sb.toString());
+                ch.setMessages(sb.toString());
             }
         }
         String json = mapper.writeValueAsString(chats);
         json = json.replace("\"[", "[");
         json = json.replace("]\"", "]");
+        json = json.replace("\\\"", "\"");
         return json;
     }
 
-    @RequestMapping(path = "/update/{chatid}")
-    public void UpdateChat(@PathVariable String chatid) {
+    @RequestMapping(path = "/update/{chat}")
+    public void UpdateChat(@PathVariable String chat) {
         try {
-            chatRepo.save(mapper.readValue(chatid, Chat.class));
+            chatRepo.save(mapper.readValue(chat, Chat.class));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @RequestMapping(path = "/delete/{chatid}")
-    public void deleteChannel(@PathVariable Long chatid){
+    @RequestMapping(path = "/delete/{chat}")
+    public void deleteChat(@PathVariable Long chatid){
         chatRepo.deleteById(chatid);
     }
 

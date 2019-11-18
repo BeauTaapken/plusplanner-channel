@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @RequestMapping("channel")
 public class ChannelController {
     @Autowired
-    ChannelRepository repo;
-    ObjectMapper mapper;
+    private ChannelRepository repo;
+    private ObjectMapper mapper;
 
     ChannelController(){
         mapper = new ObjectMapper();
@@ -30,12 +30,6 @@ public class ChannelController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @RequestMapping(path = "/read/{channelid}")
-    public List<Channel> readChannel(@PathVariable Long channelid){
-        List<Channel> channels = repo.findAll();
-        return channels.stream().filter(x -> x.getId() == channelid).collect(Collectors.toList());
     }
 
     @RequestMapping(path = "/update/{channelid}")
