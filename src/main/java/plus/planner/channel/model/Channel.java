@@ -14,8 +14,6 @@ public class Channel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long channelid;
     @NotBlank
-    private Long projectid;
-    @NotBlank
     private String name;
     @NotBlank
     private Long chatid;
@@ -30,14 +28,6 @@ public class Channel {
 
     public void setChannelid(Long channelid) {
         this.channelid = channelid;
-    }
-
-    public Long getProjectid() {
-        return projectid;
-    }
-
-    public void setProjectid(Long projectid) {
-        this.projectid = projectid;
     }
 
     public String getName() {
