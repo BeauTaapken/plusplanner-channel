@@ -19,13 +19,10 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Channel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long channelid;
-    @NotBlank
+    private String channelid;
     private String name;
-    @Null
     @JsonIgnore
-    private Long chatid;
+    private String chatid;
     @Transient
     private String messages;
 }

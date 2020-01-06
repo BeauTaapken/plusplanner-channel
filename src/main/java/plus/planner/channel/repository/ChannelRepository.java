@@ -7,7 +7,7 @@ import plus.planner.channel.model.Channel;
 
 import java.util.List;
 
-public interface ChannelRepository extends JpaRepository<Channel, Long> {
+public interface ChannelRepository extends JpaRepository<Channel, String> {
     @Query("SELECT c FROM Channel c WHERE c.chatid = :chatid")
-    List<Channel> findByChatId(@Param("chatid") Long chatid);
+    List<Channel> findByChatId(@Param("chatid") String chatid);
 }

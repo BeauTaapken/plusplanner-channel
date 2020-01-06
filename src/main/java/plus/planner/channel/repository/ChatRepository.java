@@ -7,7 +7,7 @@ import plus.planner.channel.model.Chat;
 
 import java.util.List;
 
-public interface ChatRepository extends JpaRepository<Chat, Long> {
+public interface ChatRepository extends JpaRepository<Chat, String> {
     @Query("SELECT c FROM Chat c WHERE c.projectid = :projectid")
-    List<Chat> findByProjectId(@Param("projectid") Long projectid);
+    List<Chat> findByProjectId(@Param("projectid") String projectid);
 }

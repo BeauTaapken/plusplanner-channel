@@ -17,12 +17,11 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Chat {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long chatid;
+    private String chatid;
     @NotBlank
     private String name;
     @NotBlank
-    private Long projectid;
+    private String projectid;
     @Transient
     private List<Channel> channels;
 }

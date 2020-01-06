@@ -1,48 +1,41 @@
 package plus.planner.channel.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import plus.planner.channel.model.Channel;
 import plus.planner.channel.repository.ChannelRepository;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("channel")
 public class ChannelController {
+    private final Logger logger = LoggerFactory.getLogger(ChannelController.class);
+    private final ChannelRepository repo;
+
     @Autowired
-    private ChannelRepository repo;
-    private ObjectMapper mapper;
-
-    ChannelController(){
-        mapper = new ObjectMapper();
+    public ChannelController(ChannelRepository repo) {
+        this.repo = repo;
     }
 
-    @RequestMapping(path = "/create/{subpart}")
-    public void createChannel(@PathVariable String subpart) {
-        try {
-            repo.save(mapper.readValue(subpart, Channel.class));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    public void createChannel(@RequestBody Channel channel) {
+        logger.info("saving channel: " + channel.getChannelid());
+        repo.save(channel);
+        logger.info("saved channel");
     }
 
-    @RequestMapping(path = "/update/{channelid}")
-    public void UpdateChannel(@PathVariable String channelid) {
-        try {
-            repo.save(mapper.readValue(channelid, Channel.class));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @RequestMapping(path = "/update", method = RequestMethod.POST)
+    public void UpdateChannel(@RequestBody Channel channel) {
+        logger.info("updating channel: " + channel.getChannelid());
+        repo.save(channel);
+        logger.info("updated channel");
     }
 
-    @RequestMapping(path = "/delete/{subpartid}")
-    public void deleteChannel(@PathVariable Long channelid){
+    @RequestMapping(path = "/delete", method = RequestMethod.POST)
+    public void deleteChannel(@PathVariable String channelid) {
+        logger.info("deleting channel: " + channelid);
         repo.deleteById(channelid);
+        logger.info("deleted channel");
     }
 }
