@@ -1,6 +1,7 @@
 package plus.planner.channel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -21,8 +22,8 @@ public class Channel {
     @Id
     private String channelid;
     private String name;
-    @JsonIgnore
     private String chatid;
     @Transient
+    @JsonRawValue
     private String messages;
 }

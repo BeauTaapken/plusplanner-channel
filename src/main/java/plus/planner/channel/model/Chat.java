@@ -1,10 +1,10 @@
 package plus.planner.channel.model;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
@@ -18,10 +18,9 @@ import java.util.List;
 public class Chat {
     @Id
     private String chatid;
-    @NotBlank
     private String name;
-    @NotBlank
     private String projectid;
     @Transient
+    @JsonRawValue
     private List<Channel> channels;
 }
