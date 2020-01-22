@@ -29,14 +29,14 @@ public class ChatController {
     }
 
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    @PostMapping(path = "/create")
     public void createChat(@RequestBody Chat chat) {
         logger.info("saving chat: " + chat.getChatid());
         chatRepo.save(chat);
         logger.info("saved chat");
     }
 
-    @RequestMapping(path = "/read/{projectid}", method = RequestMethod.GET)
+    @GetMapping(path = "/read/{projectid}")
     public List<Chat> readChat(@PathVariable String projectid) throws IOException {
         logger.info("getting chats for projectid: " + projectid);
         final List<Chat> chats = chatRepo.findByProjectId(projectid);
@@ -52,14 +52,14 @@ public class ChatController {
         return chats;
     }
 
-    @RequestMapping(path = "/update", method = RequestMethod.POST)
+    @PostMapping(path = "/update")
     public void updateChat(@RequestBody Chat chat) {
         logger.info("updating chat: " + chat.getChatid());
         chatRepo.save(chat);
         logger.info("updated chat");
     }
 
-    @RequestMapping(path = "/delete", method = RequestMethod.POST)
+    @PostMapping(path = "/delete")
     public void deleteChat(@RequestBody String chatid) {
         logger.info("deleting chat: " + chatid);
         chatRepo.deleteById(chatid);
