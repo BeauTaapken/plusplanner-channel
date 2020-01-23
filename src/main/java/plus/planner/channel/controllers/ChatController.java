@@ -35,20 +35,20 @@ public class ChatController {
     @PostMapping(path = "/create")
     public void createChat(@RequestBody String cht) throws IOException {
         final Chat chat = objectMapper.readValue(cht, Chat.class);
-        logger.info("saving chat: " + chat.getChatid());
+        logger.info("saving chat: {}", chat.getChatid());
         chatRepo.save(chat);
         logger.info("saved chat");
     }
 
     @GetMapping(path = "/read/{projectid}")
     public List<Chat> readChat(@PathVariable String projectid) {
-        logger.info("getting chats for projectid: " + projectid);
+        logger.info("getting chats for projectid: {}", projectid);
         final List<Chat> chats = chatRepo.findByProjectId(projectid);
         for (Chat c : chats) {
-            logger.info("getting channels for chatid: " + c.getChatid());
+            logger.info("getting channels for chatid: {}", c.getChatid());
             c.setChannels(channelRepo.findByChatId(c.getChatid()));
             for (Channel ch : c.getChannels()) {
-                logger.info("getting messages for channelid: " + ch.getChannelid());
+                logger.info("getting messages for channelid: {}", ch.getChannelid());
                 ch.setMessages(messageProvider.getMessages(ch.getChannelid()));
             }
         }
@@ -59,14 +59,14 @@ public class ChatController {
     @PostMapping(path = "/update")
     public void updateChat(@RequestBody String cht) throws IOException {
         final Chat chat = objectMapper.readValue(cht, Chat.class);
-        logger.info("updating chat: " + chat.getChatid());
+        logger.info("updating chat: {}", chat.getChatid());
         chatRepo.save(chat);
         logger.info("updated chat");
     }
 
     @PostMapping(path = "/delete")
     public void deleteChat(@RequestBody String chatid) {
-        logger.info("deleting chat: " + chatid);
+        logger.info("deleting chat: {}", chatid);
         chatRepo.deleteById(chatid);
         logger.info("deleted chat");
     }

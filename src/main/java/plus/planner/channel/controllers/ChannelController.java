@@ -20,21 +20,21 @@ public class ChannelController {
 
     @PostMapping(path = "/create")
     public void createChannel(@RequestBody Channel channel) {
-        logger.info("saving channel: " + channel.getChannelid());
+        logger.info("saving channel: {}", channel.getChannelid());
         repo.save(channel);
         logger.info("saved channel");
     }
 
     @PostMapping(path = "/update")
-    public void UpdateChannel(@RequestBody Channel channel) {
-        logger.info("updating channel: " + channel.getChannelid());
+    public void updateChannel(@RequestBody Channel channel) {
+        logger.info("updating channel: {}", channel.getChannelid());
         repo.save(channel);
         logger.info("updated channel");
     }
 
     @PostMapping(path = "/delete/{channelid}")
     public void deleteChannel(@PathVariable String channelid) {
-        logger.info("deleting channel: " + channelid);
+        logger.info("deleting channel: {}", channelid);
         repo.deleteById(channelid);
         logger.info("deleted channel");
     }
