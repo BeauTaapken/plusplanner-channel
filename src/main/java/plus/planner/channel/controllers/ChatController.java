@@ -45,7 +45,7 @@ public class ChatController {
             c.setChannels(channelRepo.findByChatId(c.getChatid()));
             for (Channel ch : c.getChannels()) {
                 logger.info("getting chats for channelid: " + ch.getChannelid());
-                ch.setMessages(restTemplate.getForObject("http://plus-planner-message-service/message/read/" + ch.getChannelid(), String.class));
+                ch.setMessages(restTemplate.getForObject("https://plus-planner-message-service/message/read/" + ch.getChannelid(), String.class));
             }
         }
         logger.info("returning chats");
