@@ -1,12 +1,13 @@
 package plus.planner.channel.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import plus.planner.channel.model.Channel;
 import plus.planner.channel.model.Chat;
+import plus.planner.channel.providers.IMessageProvider;
 import plus.planner.channel.repository.ChannelRepository;
 import plus.planner.channel.repository.ChatRepository;
 
@@ -19,33 +20,36 @@ public class ChatController {
     private final Logger logger = LoggerFactory.getLogger(ChatController.class);
     private final ChannelRepository channelRepo;
     private final ChatRepository chatRepo;
-    private final RestTemplate restTemplate;
+    private final IMessageProvider messageProvider;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ChatController(ChannelRepository channelRepo, ChatRepository chatRepo, RestTemplate restTemplate) {
+    public ChatController(ChannelRepository channelRepo, ChatRepository chatRepo, IMessageProvider messageProvider, ObjectMapper objectMapper) {
         this.channelRepo = channelRepo;
         this.chatRepo = chatRepo;
-        this.restTemplate = restTemplate;
+        this.messageProvider = messageProvider;
+        this.objectMapper = objectMapper;
     }
 
 
     @PostMapping(path = "/create")
-    public void createChat(@RequestBody Chat chat) {
+    public void createChat(@RequestBody String cht) throws IOException {
+        final Chat chat = objectMapper.readValue(cht, Chat.class);
         logger.info("saving chat: " + chat.getChatid());
         chatRepo.save(chat);
         logger.info("saved chat");
     }
 
     @GetMapping(path = "/read/{projectid}")
-    public List<Chat> readChat(@PathVariable String projectid) throws IOException {
+    public List<Chat> readChat(@PathVariable String projectid) {
         logger.info("getting chats for projectid: " + projectid);
         final List<Chat> chats = chatRepo.findByProjectId(projectid);
         for (Chat c : chats) {
             logger.info("getting channels for chatid: " + c.getChatid());
             c.setChannels(channelRepo.findByChatId(c.getChatid()));
             for (Channel ch : c.getChannels()) {
-                logger.info("getting chats for channelid: " + ch.getChannelid());
-                ch.setMessages(restTemplate.getForObject("https://plus-planner-message-service/message/read/" + ch.getChannelid(), String.class));
+                logger.info("getting messages for channelid: " + ch.getChannelid());
+                ch.setMessages(messageProvider.getMessages(ch.getChannelid()));
             }
         }
         logger.info("returning chats");
@@ -53,7 +57,8 @@ public class ChatController {
     }
 
     @PostMapping(path = "/update")
-    public void updateChat(@RequestBody Chat chat) {
+    public void updateChat(@RequestBody String cht) throws IOException {
+        final Chat chat = objectMapper.readValue(cht, Chat.class);
         logger.info("updating chat: " + chat.getChatid());
         chatRepo.save(chat);
         logger.info("updated chat");
