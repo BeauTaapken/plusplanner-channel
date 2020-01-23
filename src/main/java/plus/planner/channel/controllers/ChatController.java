@@ -5,9 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import plus.planner.channel.model.Channel;
 import plus.planner.channel.model.Chat;
+import plus.planner.channel.providers.IMessageProvider;
 import plus.planner.channel.repository.ChannelRepository;
 import plus.planner.channel.repository.ChatRepository;
 
@@ -20,15 +20,15 @@ public class ChatController {
     private final Logger logger = LoggerFactory.getLogger(ChatController.class);
     private final ChannelRepository channelRepo;
     private final ChatRepository chatRepo;
-    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private final IMessageProvider messageProvider;
 
     @Autowired
-    public ChatController(ChannelRepository channelRepo, ChatRepository chatRepo, RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public ChatController(ChannelRepository channelRepo, ChatRepository chatRepo, ObjectMapper objectMapper, IMessageProvider messageProvider) {
         this.channelRepo = channelRepo;
         this.chatRepo = chatRepo;
-        this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        this.messageProvider = messageProvider;
     }
 
 
@@ -48,8 +48,8 @@ public class ChatController {
             logger.info("getting channels for chatid: " + c.getChatid());
             c.setChannels(channelRepo.findByChatId(c.getChatid()));
             for (Channel ch : c.getChannels()) {
-                logger.info("getting chats for channelid: " + ch.getChannelid());
-                ch.setMessages(restTemplate.getForObject("http://plus-planner-message-service/message/read/" + ch.getChannelid(), String.class));
+                logger.info("getting messages for channelid: " + ch.getChannelid());
+                ch.setMessages(messageProvider.getItems(ch.getChannelid()));
             }
         }
         logger.info("returning chats");

@@ -11,7 +11,7 @@
     <groupId>plus.planner.api</groupId>
     <artifactId>plusplannerapi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>plusplannerapi</name>
+    <name>channel-service</name>
     <description>PlusPlannerAPI</description>
 
     <properties>
