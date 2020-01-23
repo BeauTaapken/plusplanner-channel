@@ -1,5 +1,6 @@
 package plus.planner.channel.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +21,20 @@ public class ChatController {
     private final ChannelRepository channelRepo;
     private final ChatRepository chatRepo;
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public ChatController(ChannelRepository channelRepo, ChatRepository chatRepo, RestTemplate restTemplate) {
+    public ChatController(ChannelRepository channelRepo, ChatRepository chatRepo, RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.channelRepo = channelRepo;
         this.chatRepo = chatRepo;
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
 
     @PostMapping(path = "/create")
-    public void createChat(@RequestBody Chat chat) {
+    public void createChat(@RequestBody String cht) throws IOException {
+        final Chat chat = objectMapper.readValue(cht, Chat.class);
         logger.info("saving chat: " + chat.getChatid());
         chatRepo.save(chat);
         logger.info("saved chat");
@@ -53,7 +57,8 @@ public class ChatController {
     }
 
     @PostMapping(path = "/update")
-    public void updateChat(@RequestBody Chat chat) {
+    public void updateChat(@RequestBody String cht) throws IOException {
+        final Chat chat = objectMapper.readValue(cht, Chat.class);
         logger.info("updating chat: " + chat.getChatid());
         chatRepo.save(chat);
         logger.info("updated chat");
