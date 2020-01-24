@@ -10,6 +10,7 @@ import plus.planner.channel.repository.ChannelRepository;
 
 import java.io.IOException;
 
+@CrossOrigin
 @RestController
 @RequestMapping("channel")
 public class ChannelController {

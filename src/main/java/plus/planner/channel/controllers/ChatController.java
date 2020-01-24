@@ -14,6 +14,7 @@ import plus.planner.channel.repository.ChatRepository;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("chat")
 public class ChatController {
