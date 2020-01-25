@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -89,6 +90,13 @@ public class channelApplicationTests {
                 .content(gson.toJson(chat))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200));
+    }
+
+    @Test
+    public void readChatCorrectly() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/chat/read/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(409));
     }
 
     @Test
